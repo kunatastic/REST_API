@@ -30,16 +30,17 @@ router.get("/:id", (req, res) => {
 
 // POST the one subscriber
 router.post("/", async (req, res) => {
-  const newSubscriber = new subsriberModel({
-    name: req.body.name,
-    subscribedChannel: req.body.subscribedChannel,
-  });
-  try {
-    const subscriber = await newSubscriber.save();
-    res.status(201).json(subscriber);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  // const newSubscriber = new subsriberModel({
+  //   name: req.body.name,
+  //   subscribedChannel: req.body.subscribedChannel,
+  // });
+  // try {
+  //   const subscriber = await newSubscriber.save();
+  //   res.status(201).json(subscriber);
+  // } catch (error) {
+  //   res.status(400).json({ message: error.message });
+  // }
+  console.log(req.body);
 });
 
 // UPDATE  one subscriber

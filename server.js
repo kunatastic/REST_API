@@ -5,6 +5,7 @@
  * 2. SET ROUTES and import
  * 3. SET UP DB
  * 4. Making and setting up a schema
+ * 5. If using POST use body-parser
  *
  */
 
@@ -24,13 +25,22 @@ app.use("/subscriber", subscriberRoutes);
 
 // CONFIG DB
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGO_URL, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
-const db = mongoose.connection;
-db.on("open", () => console.log("DB Connected!!"));
-db.on("error", (error) => console.error(error));
+mongoose.connect(
+  process.env.MONGO_URL,
+  {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  },
+  (err) => {
+    if (err) console.error(err);
+    console.log("DB Connected!!");
+  }
+);
+
+// bodyParsing
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express only accepts JSON
 app.use(express.json());
