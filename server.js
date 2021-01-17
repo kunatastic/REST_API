@@ -17,6 +17,15 @@ const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT || 1234;
 
+// bodyParsing
+var bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// CORS
+const cors = require("cors");
+app.use(cors);
+
 // importing routes
 const indexRoutes = require("./routes/index");
 const subscriberRoutes = require("./routes/Subscribers/subscriber");
@@ -32,15 +41,10 @@ mongoose.connect(
     useNewUrlParser: true,
   },
   (err) => {
-    if (err) console.error(err);
+    if (err) throw err;
     console.log("DB Connected!!");
   }
 );
-
-// bodyParsing
-var bodyParser = require("body-parser");
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express only accepts JSON
 app.use(express.json());

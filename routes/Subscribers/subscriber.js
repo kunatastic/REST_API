@@ -19,38 +19,60 @@ router.get("/", async (req, res) => {
     const subscriber = await subsriberModel.find();
     res.json(subscriber);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error });
   }
 });
 
 // GET the one subscriber
-router.get("/:id", (req, res) => {
-  res.send("GET THE SUBSCRIBER");
+router.get("/:id", async (req, res) => {
+  console.log(req.params);
+  const query = {
+    _id: req.params.id,
+  };
+  try {
+    const subscriberData = await subsriberModel.find(query);
+    // const subscriberData = await subsriberModel.findById(req.params.id);
+    res.json(subscriberData);
+  } catch (error) {
+    res.json({ errorCheck: "error", message: error });
+  }
 });
 
 // POST the one subscriber
 router.post("/", async (req, res) => {
-  // const newSubscriber = new subsriberModel({
-  //   name: req.body.name,
-  //   subscribedChannel: req.body.subscribedChannel,
-  // });
-  // try {
-  //   const subscriber = await newSubscriber.save();
-  //   res.status(201).json(subscriber);
-  // } catch (error) {
-  //   res.status(400).json({ message: error.message });
-  // }
-  console.log(req.body);
+  const newSubscriber = new subsriberModel({
+    name: req.body.name,
+    subscribedChannel: req.body.subscribedChannel,
+  });
+  try {
+    const subscriber = await newSubscriber.save();
+    res.json(subscriber);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 });
 
 // UPDATE  one subscriber
-router.patch("/", (req, res) => {
-  res.send("PATCH ONE SUBSCRIBER!");
+router.patch("/:id", async (req, res) => {
+  try {
+    const updateSubscriber = await subsriberModel.updateOne(
+      { _id: req.body.id },
+      { $set: { subscribedChannel: req.body.subscribedChannel } }
+    );
+    res.json(updateSubscriber);
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
 });
 
 // DELETE  one subscriber
-router.delete("/", (req, res) => {
-  res.send("DELETE ONE SUBSCRIBER!");
+router.delete("/:id", async (req, res) => {
+  try {
+    const delSubscriber = await subsriberModel.remove({ _id: req.params.id });
+    res.json(delSubscriber);
+  } catch (error) {
+    res.json({ message: error });
+  }
 });
 
 module.exports = router;
